@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New</title>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            height: 100%;
+            background-color: #171615;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box {
+            width: 0px;
+            height: 0px;
+            background-color: black;
+            border-radius: 100%;
+            position: absolute;
+        }
+
+        .waves {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .waves img {
+            margin-top: -35px;
+            opacity: 0;
+            transform: translateY(0px);
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="waves"></div>
+    <script>
+        const wavesElement = document.querySelector('.waves');
+
+        for (let i = 0; i <= 6; i++) {
+            var img = document.createElement('img');
+            img.src =
+                'wave.svg';
+            wavesElement.appendChild(img);
+        }
+    </script>
+
+    <script src="./Animate.js"></script>
+    <script>
+        var g = new Animate(window);
+
+        const images = document.querySelectorAll('.waves img');
+
+        for (let i = 0; i < images.length; i++) {
+            const el = images[(images.length - 1) - i];
+            const recursiveEl = images[i];
+            el.style.zIndex = images.length - i;
+
+            g.animate({
+                delay: 30 * (i),
+                duration: 300,
+                timing: (timeFraction) => {
+                    return timeFraction;
+                },
+                draw: (progress) => {
+                    el.style.opacity = progress;
+                    
+                }
+            });
+
+            g.animate({
+                delay: 10 * (i),
+                duration: 400,
+                timing: (timeFraction) => {
+                    return timeFraction;
+                },
+                draw: (progress) => {
+                    el.style.transform = `translateY(-${progress * 30}px)`;
+                }
+            });
+
+            g.animate({
+                reply: true,
+                delay: 50 * (i) + 200,
+                duration: 1000,
+                timing: (timeFraction) => {
+                    return timeFraction;
+                },
+                draw: (progress) => {
+                    const angle = Math.PI * progress;
+                    let x = Math.sin(angle);
+                    recursiveEl.style.left = `${x * 20}px`;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
